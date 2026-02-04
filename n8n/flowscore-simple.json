@@ -1,0 +1,44 @@
+{
+  "name": "FlowScore - Simple",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "flowscore",
+        "responseMode": "lastNode",
+        "options": {}
+      },
+      "id": "a1b2c3d4",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [250, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Log assessment data\nconst data = $input.first().json;\n\nconsole.log('=== NEW ASSESSMENT ===');\nconsole.log('Token:', data.token);\nconsole.log('Scores:', JSON.stringify(data.scores, null, 2));\nconsole.log('Recommendation:', data.recommendation);\nconsole.log('Completed:', data.completedAt);\n\n// Return success response\nreturn [{\n  json: {\n    success: true,\n    message: 'Assessment received',\n    token: data.token,\n    scores: data.scores,\n    recommendation: data.recommendation\n  }\n}];"
+      },
+      "id": "e5f6g7h8",
+      "name": "Process & Log",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [500, 300]
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Process & Log",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  }
+}

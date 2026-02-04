@@ -1,0 +1,224 @@
+/* FlowScore Custom Styles */
+
+/* Screen transitions */
+.screen {
+  animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Option cards */
+.option-card {
+  border: 2px solid #e5e7eb;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background: white;
+}
+
+.option-card:hover {
+  border-color: #93c5fd;
+  background-color: #eff6ff;
+}
+
+.option-card.selected {
+  border-color: #3b82f6;
+  background-color: #eff6ff;
+}
+
+.option-card.selected .option-check {
+  background-color: #3b82f6;
+  border-color: #3b82f6;
+}
+
+.option-card.selected .option-check svg {
+  display: block;
+}
+
+.option-check {
+  width: 1.5rem;
+  height: 1.5rem;
+  border: 2px solid #d1d5db;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.option-check svg {
+  display: none;
+  width: 1rem;
+  height: 1rem;
+  color: white;
+}
+
+/* Multi-select checkbox style */
+.option-card[data-type="multi"] .option-check {
+  border-radius: 0.25rem;
+}
+
+/* Scale slider */
+.scale-container {
+  width: 100%;
+}
+
+.scale-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.875rem;
+  color: #6b7280;
+  margin-bottom: 0.5rem;
+}
+
+.scale-slider {
+  width: 100%;
+  height: 0.5rem;
+  background: #e5e7eb;
+  border-radius: 0.5rem;
+  appearance: none;
+  cursor: pointer;
+}
+
+.scale-slider::-webkit-slider-thumb {
+  appearance: none;
+  width: 1.5rem;
+  height: 1.5rem;
+  background: #3b82f6;
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.scale-slider::-moz-range-thumb {
+  width: 1.5rem;
+  height: 1.5rem;
+  background: #3b82f6;
+  border-radius: 50%;
+  cursor: pointer;
+  border: none;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.scale-value {
+  text-align: center;
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #3b82f6;
+  margin-top: 1rem;
+}
+
+/* Number input */
+.number-input {
+  width: 100%;
+  max-width: 12rem;
+  margin: 0 auto;
+  display: block;
+  text-align: center;
+  font-size: 1.875rem;
+  font-weight: bold;
+  border: 2px solid #e5e7eb;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  transition: border-color 0.2s ease;
+}
+
+.number-input:focus {
+  border-color: #3b82f6;
+  outline: none;
+}
+
+/* Text input */
+.text-input {
+  width: 100%;
+  border: 2px solid #e5e7eb;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  transition: border-color 0.2s ease;
+  resize: none;
+}
+
+.text-input:focus {
+  border-color: #3b82f6;
+  outline: none;
+}
+
+/* Score cards */
+.score-card {
+  background-color: #f9fafb;
+  border-radius: 0.5rem;
+  padding: 1rem;
+}
+
+/* Priority items */
+.priority-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 1rem;
+  background-color: #f9fafb;
+  border-radius: 0.5rem;
+}
+
+.priority-number {
+  width: 2rem;
+  height: 2rem;
+  background-color: #3b82f6;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  flex-shrink: 0;
+}
+
+/* Helper modal */
+#helper-modal.flex {
+  animation: fadeInModal 0.2s ease-out;
+}
+
+@keyframes fadeInModal {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+#helper-modal > div {
+  animation: slideUp 0.3s ease-out;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Loading spinner */
+.spinner {
+  width: 2rem;
+  height: 2rem;
+  border: 4px solid #bfdbfe;
+  border-top-color: #3b82f6;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
