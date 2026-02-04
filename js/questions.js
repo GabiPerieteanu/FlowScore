@@ -1,15 +1,46 @@
 /**
  * FlowScore - Questions Database
  * 25 întrebări pentru assessment de procese
+ * Bilingual: Romanian (RO) & English (EN)
  */
 
 const SECTIONS = {
-  1: { name: "Documente & Informații", color: "blue" },
-  2: { name: "Comunicare & Coordonare", color: "green" },
-  3: { name: "Procese Operaționale", color: "orange" },
-  4: { name: "Date & Raportare", color: "purple" },
-  5: { name: "Evaluare Generală", color: "gray" }
+  1: {
+    name: "Documente & Informații",
+    name_en: "Documents & Information",
+    color: "blue"
+  },
+  2: {
+    name: "Comunicare & Coordonare",
+    name_en: "Communication & Coordination",
+    color: "green"
+  },
+  3: {
+    name: "Procese Operaționale",
+    name_en: "Operational Processes",
+    color: "orange"
+  },
+  4: {
+    name: "Date & Raportare",
+    name_en: "Data & Reporting",
+    color: "purple"
+  },
+  5: {
+    name: "Evaluare Generală",
+    name_en: "General Assessment",
+    color: "gray"
+  }
 };
+
+/**
+ * Get section name based on current language
+ */
+function getSectionName(sectionNum) {
+  const section = SECTIONS[sectionNum];
+  if (!section) return '';
+  const lang = typeof getCurrentLanguage === 'function' ? getCurrentLanguage() : 'ro';
+  return lang === 'en' ? (section.name_en || section.name) : section.name;
+}
 
 const questions = [
   // ============================================
@@ -19,12 +50,13 @@ const questions = [
     id: "q01",
     section: 1,
     text: "Unde păstrați documentele importante (contracte, facturi, oferte)?",
+    text_en: "Where do you store important documents (contracts, invoices, quotes)?",
     type: "multi",
     options: [
-      { value: "digital_organized", label: "Digital, în foldere organizate (Google Drive, OneDrive, etc.)" },
-      { value: "digital_mixed", label: "Digital, dar în locuri diferite, greu de găsit" },
-      { value: "whatsapp_email", label: "Prin WhatsApp, email, sau mesaje" },
-      { value: "paper", label: "Pe hârtie, în dosare fizice" }
+      { value: "digital_organized", label: "Digital, în foldere organizate (Google Drive, OneDrive, etc.)", label_en: "Digital, in organized folders (Google Drive, OneDrive, etc.)" },
+      { value: "digital_mixed", label: "Digital, dar în locuri diferite, greu de găsit", label_en: "Digital, but in different places, hard to find" },
+      { value: "whatsapp_email", label: "Prin WhatsApp, email, sau mesaje", label_en: "Via WhatsApp, email, or messages" },
+      { value: "paper", label: "Pe hârtie, în dosare fizice", label_en: "On paper, in physical folders" }
     ],
     weights: {
       financial_impact: { digital_organized: 0, digital_mixed: 10, whatsapp_email: 20, paper: 25 },
@@ -51,10 +83,12 @@ const questions = [
     id: "q02",
     section: 1,
     text: "Cât timp durează, în medie, să găsiți un document specific când aveți nevoie de el?",
+    text_en: "How long does it take, on average, to find a specific document when you need it?",
     type: "scale",
     scaleMin: 1,
     scaleMax: 5,
     scaleLabels: ["Sub 1 minut", "1-5 minute", "5-15 minute", "15-30 minute", "Peste 30 min"],
+    scaleLabels_en: ["Under 1 min", "1-5 minutes", "5-15 minutes", "15-30 minutes", "Over 30 min"],
     weights: {
       financial_impact: [0, 5, 15, 25, 35],
       time_waste: [0, 10, 25, 40, 50],

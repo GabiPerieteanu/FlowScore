@@ -130,13 +130,17 @@ function renderQuestion() {
 
   // Update section badge
   const section = SECTIONS[question.section];
+  const lang = typeof getCurrentLanguage === 'function' ? getCurrentLanguage() : 'ro';
+  const sectionName = lang === 'en' ? (section.name_en || section.name) : section.name;
+  const sectionLabel = lang === 'en' ? 'Section' : 'Secțiunea';
   document.getElementById('section-badge').textContent =
-    `Secțiunea ${question.section}: ${section.name}`;
+    `${sectionLabel} ${question.section}: ${sectionName}`;
   document.getElementById('section-badge').className =
     `inline-block bg-${section.color}-100 text-${section.color}-800 text-sm font-medium px-3 py-1 rounded-full mb-4`;
 
-  // Update question text
-  document.getElementById('question-text').textContent = question.text;
+  // Update question text (use English if available and selected)
+  const questionText = lang === 'en' ? (question.text_en || question.text) : question.text;
+  document.getElementById('question-text').textContent = questionText;
 
   // Render options based on type
   const container = document.getElementById('options-container');
@@ -170,11 +174,15 @@ function renderQuestion() {
 function renderChoiceOptions(question, container) {
   const existingAnswer = state.answers.find(a => a.questionId === question.id);
   const selectedValues = existingAnswer?.value || (question.type === 'multi' ? [] : null);
+  const lang = typeof getCurrentLanguage === 'function' ? getCurrentLanguage() : 'ro';
 
   question.options.forEach(option => {
     const isSelected = question.type === 'multi'
       ? selectedValues.includes(option.value)
       : selectedValues === option.value;
+
+    // Get translated label if available
+    const optionLabel = lang === 'en' ? (option.label_en || option.label) : option.label;
 
     const div = document.createElement('div');
     div.className = `option-card ${isSelected ? 'selected' : ''}`;
@@ -187,7 +195,7 @@ function renderChoiceOptions(question, container) {
             <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
           </svg>
         </div>
-        <span class="text-gray-700">${option.label}</span>
+        <span class="text-gray-700">${optionLabel}</span>
       </div>
     `;
 
@@ -214,11 +222,13 @@ function handleOptionClick(question, value, element) {
 function renderScaleInput(question, container) {
   const existingAnswer = state.answers.find(a => a.questionId === question.id);
   const currentValue = existingAnswer?.value || 3;
+  const lang = typeof getCurrentLanguage === 'function' ? getCurrentLanguage() : 'ro';
+  const scaleLabels = lang === 'en' ? (question.scaleLabels_en || question.scaleLabels) : question.scaleLabels;
 
   container.innerHTML = `
     <div class="scale-container">
       <div class="scale-labels">
-        ${question.scaleLabels.map((label, i) => `
+        ${scaleLabels.map((label, i) => `
           <span class="text-center flex-1 ${i + 1 === currentValue ? 'font-bold text-blue-600' : ''}">${label}</span>
         `).join('')}
       </div>
@@ -389,8 +399,11 @@ function prevQuestion() {
 function updateProgress() {
   const progress = ((state.currentQuestionIndex + 1) / state.questionFlow.length) * 100;
   document.getElementById('progress-bar').style.width = `${progress}%`;
-  document.getElementById('progress-text').textContent =
-    `Întrebarea ${state.currentQuestionIndex + 1} din ${state.questionFlow.length}`;
+  const lang = typeof getCurrentLanguage === 'function' ? getCurrentLanguage() : 'ro';
+  const progressText = lang === 'en'
+    ? `Question ${state.currentQuestionIndex + 1} of ${state.questionFlow.length}`
+    : `Întrebarea ${state.currentQuestionIndex + 1} din ${state.questionFlow.length}`;
+  document.getElementById('progress-text').textContent = progressText;
 }
 
 // ==========================================

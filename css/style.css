@@ -222,3 +222,18 @@
 @keyframes spin {
   to { transform: rotate(360deg); }
 }
+
+/* Language toggle buttons */
+.lang-btn {
+  color: #6b7280;
+  background: transparent;
+}
+
+.lang-btn:hover {
+  background-color: #f3f4f6;
+}
+
+.lang-btn.active {
+  background-color: #3b82f6;
+  color: white;
+}

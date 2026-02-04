@@ -18,8 +18,19 @@
         </div>
         <h1 class="text-xl font-semibold text-gray-800">FlowScore</h1>
       </div>
-      <div class="text-sm text-gray-500">
-        <span id="progress-text">Întrebarea 1 din 25</span>
+      <div class="flex items-center gap-4">
+        <!-- Language Toggle -->
+        <div class="flex items-center gap-1 border rounded-lg p-1">
+          <button onclick="switchLanguage('ro')" class="lang-btn px-2 py-1 rounded text-sm font-medium transition-colors active" data-lang="ro" title="Română">
+            🇷🇴 RO
+          </button>
+          <button onclick="switchLanguage('en')" class="lang-btn px-2 py-1 rounded text-sm font-medium transition-colors" data-lang="en" title="English">
+            🇬🇧 EN
+          </button>
+        </div>
+        <div class="text-sm text-gray-500">
+          <span id="progress-text">Întrebarea 1 din 25</span>
+        </div>
       </div>
     </div>
     <!-- Progress Bar -->
@@ -271,6 +282,7 @@
   </footer>
 
   <!-- Scripts -->
+  <script src="js/translations.js"></script>
   <script src="js/questions.js"></script>
   <script src="js/scoring.js"></script>
   <script src="js/app.js"></script>
