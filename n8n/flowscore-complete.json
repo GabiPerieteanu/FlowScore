@@ -36,14 +36,15 @@
     },
     {
       "parameters": {
+        "operation": "append",
         "documentId": {
           "__rl": true,
-          "value": "YOUR_GOOGLE_SHEET_ID",
+          "value": "1K-D5vVfNkJEazmUS2fWKX5nnyxPMXIJNURFrPx2mMu4",
           "mode": "id"
         },
         "sheetName": {
           "__rl": true,
-          "value": "Responses",
+          "value": "FlowScore",
           "mode": "name"
         },
         "columns": {
@@ -68,17 +69,12 @@
       "id": "google-sheets",
       "name": "Save to Google Sheets",
       "type": "n8n-nodes-base.googleSheets",
-      "typeVersion": 4.4,
-      "position": [750, 200],
-      "credentials": {
-        "googleSheetsOAuth2Api": {
-          "id": "YOUR_CREDENTIAL_ID",
-          "name": "Google Sheets account"
-        }
-      }
+      "typeVersion": 4.5,
+      "position": [750, 200]
     },
     {
       "parameters": {
+        "fromEmail": "oneventro@gmail.com",
         "sendTo": "={{ $json.recipientEmail }}",
         "subject": "={{ $json.emailSubject }}",
         "emailType": "html",
@@ -91,13 +87,7 @@
       "name": "Send Results Email",
       "type": "n8n-nodes-base.emailSend",
       "typeVersion": 2.1,
-      "position": [750, 400],
-      "credentials": {
-        "smtp": {
-          "id": "YOUR_SMTP_CREDENTIAL_ID",
-          "name": "SMTP"
-        }
-      }
+      "position": [750, 400]
     },
     {
       "parameters": {

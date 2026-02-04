@@ -39,21 +39,27 @@ const DIMENSIONS = {
 const RECOMMENDATIONS = {
   web_app: {
     title: "Aplicație Web / Mobile",
+    subtitle: "Digitalizare de bază",
     description: "Aveți nevoie de digitalizare de bază înainte de automatizare.",
     details: "Recomandăm să începeți cu o aplicație simplă pentru colectare date, urmărire comenzi, sau management clienți.",
-    icon: "device-mobile"
+    icon: "device-mobile",
+    color: "emerald"
   },
   automation: {
     title: "Automatizare Procese",
+    subtitle: "Workflow automat",
     description: "Procesele sunt clare și pot fi automatizate direct.",
     details: "Puteți implementa automatizări pentru email-uri, rapoarte, sincronizare date între sisteme.",
-    icon: "cog"
+    icon: "cog",
+    color: "orange"
   },
   hybrid: {
     title: "Digitalizare + Automatizare",
+    subtitle: "Soluție completă",
     description: "O combinație de aplicație și automatizări.",
     details: "Recomandăm o aplicație de bază cu automatizări integrate pentru procesele repetitive.",
-    icon: "sparkles"
+    icon: "layers",
+    color: "blue"
   }
 };
 

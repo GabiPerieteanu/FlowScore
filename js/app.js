@@ -548,7 +548,18 @@ function renderResults() {
   }, 100);
 
   // Update recommendation
+  const recCard = document.getElementById('recommendation-card');
   document.getElementById('recommendation-text').textContent = state.recommendation.title;
+  document.getElementById('recommendation-subtitle').textContent = state.recommendation.subtitle;
+  document.getElementById('recommendation-description').textContent = state.recommendation.description;
+
+  // Set recommendation card color based on type
+  const colorClasses = {
+    emerald: 'bg-gradient-to-r from-emerald-500 to-emerald-600',
+    orange: 'bg-gradient-to-r from-orange-500 to-orange-600',
+    blue: 'bg-gradient-to-r from-blue-500 to-indigo-600'
+  };
+  recCard.className = `rounded-xl p-6 text-white text-center mb-8 ${colorClasses[state.recommendation.color] || colorClasses.blue}`;
 
   // Render priorities
   const prioritiesList = document.getElementById('priorities-list');

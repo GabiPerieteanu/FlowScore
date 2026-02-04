@@ -1,0 +1,164 @@
+{
+  "name": "FlowScore - Complete (Sheets + Email)",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "flowscore",
+        "responseMode": "responseNode",
+        "options": {
+          "responseHeaders": {
+            "entries": [
+              {
+                "name": "Access-Control-Allow-Origin",
+                "value": "*"
+              }
+            ]
+          }
+        }
+      },
+      "id": "webhook-main",
+      "name": "Webhook FlowScore",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [250, 300],
+      "webhookId": "flowscore-main"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Process incoming data\nconst data = $input.first().json;\n\n// Format scores for display\nconst scores = data.scores || {};\nconst contact = data.contact || {};\nconst priorities = data.priorities || [];\n\n// Create formatted priority list\nconst priorityList = priorities.map((p, i) => \n  `${i + 1}. ${p.title} - ${p.description} (Impact: ${p.impact}, Efort: ${p.effort})`\n).join('\\n');\n\n// Create row for Google Sheets\nconst timestamp = new Date().toISOString();\nconst sheetRow = {\n  timestamp: timestamp,\n  company: contact.company || '',\n  email: contact.email || '',\n  phone: contact.phone || '',\n  token: data.token || '',\n  financial_impact: scores.financial_impact || 0,\n  time_waste: scores.time_waste || 0,\n  risk_control: scores.risk_control || 0,\n  digital_maturity: scores.digital_maturity || 0,\n  automatable_score: scores.automatable_score || 0,\n  recommendation: data.recommendationTitle || data.recommendation || '',\n  priorities_summary: priorityList\n};\n\n// Create email HTML\nconst emailHtml = `\n<!DOCTYPE html>\n<html>\n<head>\n  <style>\n    body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }\n    .container { max-width: 600px; margin: 0 auto; padding: 20px; }\n    .header { background: linear-gradient(135deg, #3b82f6, #8b5cf6); color: white; padding: 30px; border-radius: 10px 10px 0 0; text-align: center; }\n    .content { background: #f9fafb; padding: 30px; border-radius: 0 0 10px 10px; }\n    .score-card { background: white; padding: 15px; margin: 10px 0; border-radius: 8px; border-left: 4px solid #3b82f6; }\n    .score-value { font-size: 24px; font-weight: bold; color: #3b82f6; }\n    .recommendation { background: linear-gradient(135deg, #3b82f6, #6366f1); color: white; padding: 20px; border-radius: 10px; text-align: center; margin: 20px 0; }\n    .priority { background: white; padding: 15px; margin: 10px 0; border-radius: 8px; display: flex; align-items: flex-start; gap: 15px; }\n    .priority-num { background: #3b82f6; color: white; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; flex-shrink: 0; }\n    .cta { background: #3b82f6; color: white; padding: 15px 30px; text-decoration: none; border-radius: 8px; display: inline-block; margin-top: 20px; }\n    .footer { text-align: center; padding: 20px; color: #6b7280; font-size: 12px; }\n  </style>\n</head>\n<body>\n  <div class=\"container\">\n    <div class=\"header\">\n      <h1 style=\"margin:0;\">FlowScore</h1>\n      <p style=\"margin:10px 0 0 0; opacity: 0.9;\">Rezultatele Assessment-ului Tau</p>\n    </div>\n    \n    <div class=\"content\">\n      <p>Salut <strong>${contact.company || 'there'}</strong>!</p>\n      <p>Multumim ca ai completat FlowScore Assessment. Iata rezultatele tale:</p>\n      \n      <div class=\"recommendation\">\n        <p style=\"margin:0 0 5px 0; opacity: 0.9; font-size: 14px;\">Recomandarea Noastra</p>\n        <h2 style=\"margin:0;\">${data.recommendationTitle || data.recommendation || 'Analiza Personalizata'}</h2>\n      </div>\n      \n      <h3>Scorurile Tale</h3>\n      \n      <div class=\"score-card\">\n        <div style=\"display: flex; justify-content: space-between; align-items: center;\">\n          <span>Impact Financiar</span>\n          <span class=\"score-value\">${scores.financial_impact || 0}%</span>\n        </div>\n      </div>\n      \n      <div class=\"score-card\" style=\"border-left-color: #f97316;\">\n        <div style=\"display: flex; justify-content: space-between; align-items: center;\">\n          <span>Timp Pierdut</span>\n          <span class=\"score-value\" style=\"color: #f97316;\">${scores.time_waste || 0}%</span>\n        </div>\n      </div>\n      \n      <div class=\"score-card\" style=\"border-left-color: #ef4444;\">\n        <div style=\"display: flex; justify-content: space-between; align-items: center;\">\n          <span>Risc & Control</span>\n          <span class=\"score-value\" style=\"color: #ef4444;\">${scores.risk_control || 0}%</span>\n        </div>\n      </div>\n      \n      <div class=\"score-card\" style=\"border-left-color: #22c55e;\">\n        <div style=\"display: flex; justify-content: space-between; align-items: center;\">\n          <span>Maturitate Digitala</span>\n          <span class=\"score-value\" style=\"color: #22c55e;\">${scores.digital_maturity || 0}%</span>\n        </div>\n      </div>\n      \n      <div class=\"score-card\" style=\"border-left-color: #a855f7;\">\n        <div style=\"display: flex; justify-content: space-between; align-items: center;\">\n          <span>Potential Automatizare</span>\n          <span class=\"score-value\" style=\"color: #a855f7;\">${scores.automatable_score || 0}%</span>\n        </div>\n      </div>\n      \n      <h3>Top 3 Prioritati</h3>\n      \n      ${priorities.map((p, i) => `\n        <div class=\"priority\">\n          <div class=\"priority-num\">${i + 1}</div>\n          <div>\n            <strong>${p.title}</strong>\n            <p style=\"margin: 5px 0; color: #6b7280;\">${p.description}</p>\n            <span style=\"font-size: 12px; color: #3b82f6;\">Impact: ${p.impact === 'high' ? 'Ridicat' : p.impact === 'medium' ? 'Mediu' : 'Scazut'}</span>\n            <span style=\"font-size: 12px; color: #6b7280; margin-left: 10px;\">Efort: ${p.effort === 'low' ? 'Mic' : p.effort === 'medium' ? 'Mediu' : 'Mare'}</span>\n          </div>\n        </div>\n      `).join('')}\n      \n      <div style=\"text-align: center; margin-top: 30px;\">\n        <p><strong>Vrei sa discutam rezultatele?</strong></p>\n        <p style=\"color: #6b7280;\">Programeaza o consultatie gratuita de 30 minute.</p>\n        <a href=\"https://calendly.com/flowscore\" class=\"cta\">Programeaza Consultatie</a>\n      </div>\n    </div>\n    \n    <div class=\"footer\">\n      <p>© 2024 FlowScore - Assessment de Procese pentru IMM-uri</p>\n      <p>Ai primit acest email deoarece ai completat FlowScore Assessment.</p>\n    </div>\n  </div>\n</body>\n</html>\n`;\n\nreturn [{\n  json: {\n    ...data,\n    sheetRow,\n    emailHtml,\n    emailSubject: `Rezultatele FlowScore pentru ${contact.company || 'firma ta'}`,\n    recipientEmail: contact.email\n  }\n}];"
+      },
+      "id": "process-data",
+      "name": "Process Data",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [500, 300]
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1K-D5vVfNkJEazmUS2fWKX5nnyxPMXIJNURFrPx2mMu4",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "FlowScore",
+          "mode": "name"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "timestamp": "={{ $json.sheetRow.timestamp }}",
+            "company": "={{ $json.sheetRow.company }}",
+            "email": "={{ $json.sheetRow.email }}",
+            "phone": "={{ $json.sheetRow.phone }}",
+            "token": "={{ $json.sheetRow.token }}",
+            "financial_impact": "={{ $json.sheetRow.financial_impact }}",
+            "time_waste": "={{ $json.sheetRow.time_waste }}",
+            "risk_control": "={{ $json.sheetRow.risk_control }}",
+            "digital_maturity": "={{ $json.sheetRow.digital_maturity }}",
+            "automatable_score": "={{ $json.sheetRow.automatable_score }}",
+            "recommendation": "={{ $json.sheetRow.recommendation }}",
+            "priorities": "={{ $json.sheetRow.priorities_summary }}"
+          }
+        },
+        "options": {}
+      },
+      "id": "google-sheets",
+      "name": "Save to Google Sheets",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [750, 200],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "FuvsHb5KK5FzwB63",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "fromEmail": "oneventro@gmail.com",
+        "sendTo": "={{ $json.recipientEmail }}",
+        "subject": "={{ $json.emailSubject }}",
+        "emailType": "html",
+        "message": "={{ $json.emailHtml }}",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "id": "send-email",
+      "name": "Send Results Email",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [750, 400]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ {\"success\": true, \"message\": \"Assessment saved and email sent\", \"token\": $json.token} }}"
+      },
+      "id": "response",
+      "name": "Respond Success",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [1000, 300]
+    }
+  ],
+  "connections": {
+    "Webhook FlowScore": {
+      "main": [
+        [
+          {
+            "node": "Process Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Process Data": {
+      "main": [
+        [
+          {
+            "node": "Save to Google Sheets",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Send Results Email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Save to Google Sheets": {
+      "main": [
+        [
+          {
+            "node": "Respond Success",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send Results Email": {
+      "main": [
+        [
+          {
+            "node": "Respond Success",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  }
+}
