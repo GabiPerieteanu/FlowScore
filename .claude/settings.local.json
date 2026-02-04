@@ -7,7 +7,10 @@
       "Bash(docker restart:*)",
       "Bash(docker logs:*)",
       "Bash(gh auth status:*)",
-      "Bash(gh repo create:*)"
+      "Bash(gh repo create:*)",
+      "Bash(git push)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)"
     ]
   }
 }

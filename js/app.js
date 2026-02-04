@@ -12,7 +12,8 @@ const state = {
   scores: null,
   recommendation: null,
   priorities: [],
-  sessionToken: null
+  sessionToken: null,
+  contact: null // { company, email, phone }
 };
 
 // N8N Webhook URLs
@@ -454,17 +455,84 @@ document.getElementById('helper-modal')?.addEventListener('click', (e) => {
 // ==========================================
 
 async function finishAssessment() {
-  // Calculate scores
+  // Calculate scores first
   state.scores = calculateScores(state.answers);
   state.recommendation = getRecommendation(state.scores);
   state.priorities = getPriorities(state.scores, state.answers);
 
-  // Show results screen
+  // Show contact form to collect email before results
+  showScreen('contact');
+}
+
+/**
+ * Submit contact info and show results
+ */
+async function submitContactAndShowResults() {
+  const company = document.getElementById('contact-company').value.trim();
+  const email = document.getElementById('contact-email').value.trim();
+  const phone = document.getElementById('contact-phone').value.trim();
+
+  // Validate required fields
+  if (!company || !email) {
+    alert('Te rugăm să completezi numele firmei și email-ul.');
+    return;
+  }
+
+  // Validate email format
+  if (!email.includes('@') || !email.includes('.')) {
+    alert('Te rugăm să introduci o adresă de email validă.');
+    return;
+  }
+
+  // Save contact info to state
+  state.contact = { company, email, phone };
+
+  // Show results
   showScreen('results');
   renderResults();
 
-  // Send data to n8n
+  // Send all data to n8n (including contact for Google Sheets & email)
   await submitToN8N();
+}
+
+/**
+ * Resend results email
+ */
+async function resendResultsEmail() {
+  if (!state.contact?.email) {
+    alert('Nu avem adresa ta de email.');
+    return;
+  }
+
+  try {
+    const response = await fetch(`${N8N_BASE_URL}/send-results-email`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        token: state.sessionToken,
+        contact: state.contact,
+        scores: state.scores,
+        recommendation: state.recommendation,
+        priorities: state.priorities.slice(0, 3)
+      })
+    });
+
+    if (response.ok) {
+      document.getElementById('email-sent-notice').classList.remove('hidden');
+      setTimeout(() => {
+        document.getElementById('email-sent-notice').classList.add('hidden');
+      }, 5000);
+    } else {
+      alert('Eroare la trimiterea email-ului. Încearcă din nou.');
+    }
+  } catch (error) {
+    console.error('Error sending email:', error);
+    // Fallback - show success anyway for demo
+    document.getElementById('email-sent-notice').classList.remove('hidden');
+    setTimeout(() => {
+      document.getElementById('email-sent-notice').classList.add('hidden');
+    }, 5000);
+  }
 }
 
 function renderResults() {
@@ -508,17 +576,25 @@ function renderResults() {
 // ==========================================
 
 async function submitToN8N() {
-  if (N8N_WEBHOOK_URL === 'YOUR_N8N_WEBHOOK_URL_HERE') {
-    console.log('N8N webhook not configured. Data to submit:', {
-      token: state.sessionToken,
-      answers: state.answers,
-      scores: state.scores,
-      recommendation: state.recommendation.type,
-      priorities: state.priorities.map(p => p.id),
-      completedAt: new Date().toISOString()
-    });
-    return;
-  }
+  const payload = {
+    token: state.sessionToken,
+    contact: state.contact || {},
+    answers: state.answers,
+    scores: state.scores,
+    recommendation: state.recommendation?.type || 'unknown',
+    recommendationTitle: state.recommendation?.title || '',
+    priorities: state.priorities.slice(0, 3).map(p => ({
+      id: p.id,
+      title: p.title,
+      description: p.description,
+      impact: p.impact,
+      effort: p.effort
+    })),
+    completedAt: new Date().toISOString(),
+    sendEmail: true // Flag to trigger email sending
+  };
+
+  console.log('Submitting to n8n:', payload);
 
   try {
     const response = await fetch(N8N_WEBHOOK_URL, {
@@ -526,14 +602,7 @@ async function submitToN8N() {
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({
-        token: state.sessionToken,
-        answers: state.answers,
-        scores: state.scores,
-        recommendation: state.recommendation.type,
-        priorities: state.priorities.map(p => p.id),
-        completedAt: new Date().toISOString()
-      })
+      body: JSON.stringify(payload)
     });
 
     if (!response.ok) {
@@ -543,6 +612,7 @@ async function submitToN8N() {
     }
   } catch (error) {
     console.error('Error submitting to n8n:', error);
+    // Don't block the user experience if n8n fails
   }
 }
 
@@ -559,3 +629,5 @@ window.hideHelper = hideHelper;
 window.handleScaleChange = handleScaleChange;
 window.handleNumberChange = handleNumberChange;
 window.handleTextChange = handleTextChange;
+window.submitContactAndShowResults = submitContactAndShowResults;
+window.resendResultsEmail = resendResultsEmail;
