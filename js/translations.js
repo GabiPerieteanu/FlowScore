@@ -58,6 +58,22 @@ const TRANSLATIONS = {
     // Footer
     footerText: '© 2024 FlowScore. Assessment de Procese pentru IMM-uri.',
 
+    // Contact Form
+    contactTitle: 'Felicitări! Ai terminat.',
+    contactSubtitle: 'Completează datele de mai jos pentru a primi rezultatele pe email.',
+    companyLabel: 'Numele firmei / Site *',
+    emailLabel: 'Email *',
+    phoneLabel: 'Telefon (opțional)',
+    viewResults: 'Vezi Rezultatele',
+    dataPrivacy: '🔒 Datele tale sunt în siguranță și nu vor fi partajate cu terți.',
+
+    // CTA
+    ctaTitle: '🎯 Vrei un plan detaliat?',
+    ctaDescription: 'Programează o consultație gratuită de 30 minute pentru a discuta rezultatele și pașii următori.',
+    scheduleConsultation: 'Programează Consultație',
+    resendEmail: 'Retrimite pe Email',
+    emailSentNotice: '✅ Rezultatele au fost trimise pe email!',
+
     // Sections
     sections: {
       1: { name: 'Documente & Informații', color: 'blue' },
@@ -121,6 +137,22 @@ const TRANSLATIONS = {
 
     // Footer
     footerText: '© 2024 FlowScore. Process Assessment for SMEs.',
+
+    // Contact Form
+    contactTitle: 'Congratulations! You finished.',
+    contactSubtitle: 'Fill in your details below to receive results by email.',
+    companyLabel: 'Company name / Website *',
+    emailLabel: 'Email *',
+    phoneLabel: 'Phone (optional)',
+    viewResults: 'View Results',
+    dataPrivacy: '🔒 Your data is secure and will not be shared with third parties.',
+
+    // CTA
+    ctaTitle: '🎯 Want a detailed plan?',
+    ctaDescription: 'Schedule a free 30-minute consultation to discuss results and next steps.',
+    scheduleConsultation: 'Schedule Consultation',
+    resendEmail: 'Resend Email',
+    emailSentNotice: '✅ Results have been sent to your email!',
 
     // Sections
     sections: {

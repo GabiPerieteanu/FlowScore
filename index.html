@@ -11,26 +11,28 @@
 
   <!-- Header -->
   <header class="bg-white shadow-sm">
-    <div class="max-w-4xl mx-auto px-4 py-4 flex items-center justify-between">
-      <div class="flex items-center gap-3">
-        <div class="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
-          <span class="text-white font-bold text-xl">F</span>
+    <div class="max-w-4xl mx-auto px-4 py-3 flex items-center justify-between">
+      <!-- Logo - hide text on mobile -->
+      <div class="flex items-center gap-2">
+        <div class="w-9 h-9 bg-blue-600 rounded-lg flex items-center justify-center">
+          <span class="text-white font-bold text-lg">F</span>
         </div>
-        <h1 class="text-xl font-semibold text-gray-800">FlowScore</h1>
+        <h1 class="text-lg font-semibold text-gray-800 hidden sm:block">FlowScore</h1>
       </div>
-      <div class="flex items-center gap-4">
-        <!-- Language Toggle -->
-        <div class="flex items-center gap-1 border rounded-lg p-1">
-          <button onclick="switchLanguage('ro')" class="lang-btn px-2 py-1 rounded text-sm font-medium transition-colors active" data-lang="ro" title="Română">
-            🇷🇴 RO
-          </button>
-          <button onclick="switchLanguage('en')" class="lang-btn px-2 py-1 rounded text-sm font-medium transition-colors" data-lang="en" title="English">
-            🇬🇧 EN
-          </button>
-        </div>
-        <div class="text-sm text-gray-500">
-          <span id="progress-text">Întrebarea 1 din 25</span>
-        </div>
+
+      <!-- Language Toggle - centered -->
+      <div class="flex items-center gap-1 border rounded-lg p-1">
+        <button onclick="switchLanguage('ro')" class="lang-btn px-2 py-1 rounded text-sm font-medium transition-colors active" data-lang="ro" title="Română">
+          🇷🇴 RO
+        </button>
+        <button onclick="switchLanguage('en')" class="lang-btn px-2 py-1 rounded text-sm font-medium transition-colors" data-lang="en" title="English">
+          🇬🇧 EN
+        </button>
+      </div>
+
+      <!-- Progress -->
+      <div class="text-sm text-gray-500">
+        <span id="progress-text">Întrebarea 1 din 25</span>
       </div>
     </div>
     <!-- Progress Bar -->
@@ -58,13 +60,13 @@
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
           </svg>
         </div>
-        <h2 class="text-2xl font-bold text-gray-800 mb-4">Acces Restricționat</h2>
-        <p class="text-gray-600 mb-6 max-w-md mx-auto">
+        <h2 class="text-2xl font-bold text-gray-800 mb-4" data-i18n="accessDeniedTitle">Acces Restricționat</h2>
+        <p class="text-gray-600 mb-6 max-w-md mx-auto" data-i18n="accessDeniedMessage">
           Acest assessment este disponibil doar pe bază de invitație.
-          Dacă ați primit un link de invitație, verificați că l-ați copiat corect.
         </p>
+        <p class="text-gray-500 text-sm mb-4" data-i18n="accessDeniedHelp">Dacă ați primit un link de invitație, verificați că l-ați copiat corect.</p>
         <div class="bg-gray-50 rounded-lg p-4 text-sm text-gray-500">
-          <p>Aveți nevoie de acces? Contactați-ne pentru o invitație.</p>
+          <p data-i18n="accessDeniedContact">Aveți nevoie de acces? Contactați-ne pentru o invitație.</p>
         </div>
       </div>
     </div>
@@ -77,33 +79,16 @@
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path>
           </svg>
         </div>
-        <h2 class="text-2xl font-bold text-gray-800 mb-4">Audit Rapid de Procese</h2>
-        <p class="text-gray-600 mb-6 max-w-md mx-auto">
-          Acest assessment durează aproximativ 10-15 minute și vă va ajuta să identificați
-          prioritățile de automatizare din afacerea dumneavoastră.
+        <h2 class="text-2xl font-bold text-gray-800 mb-4" data-i18n="welcomeTitle">Bine ați venit la FlowScore</h2>
+        <p class="text-gray-600 mb-6 max-w-md mx-auto" data-i18n="welcomeDescription">
+          Acest chestionar vă va ajuta să identificați oportunitățile de îmbunătățire și automatizare din afacerea dumneavoastră.
         </p>
-        <div class="space-y-3 text-left max-w-sm mx-auto mb-8">
-          <div class="flex items-center gap-3 text-gray-700">
-            <svg class="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
-              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
-            </svg>
-            <span>25 întrebări despre procesele tale</span>
-          </div>
-          <div class="flex items-center gap-3 text-gray-700">
-            <svg class="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
-              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
-            </svg>
-            <span>Scor pe 5 dimensiuni</span>
-          </div>
-          <div class="flex items-center gap-3 text-gray-700">
-            <svg class="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
-              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
-            </svg>
-            <span>Recomandări personalizate</span>
-          </div>
+        <div class="space-y-2 text-left max-w-sm mx-auto mb-8">
+          <p class="text-gray-700" data-i18n="welcomeTime">⏱️ Durată estimată: 5-7 minute</p>
+          <p class="text-gray-700" data-i18n="welcomePrivacy">🔒 Răspunsurile sunt confidențiale</p>
         </div>
-        <button onclick="startAssessment()" class="bg-blue-600 hover:bg-blue-700 text-white font-medium px-8 py-3 rounded-lg transition-colors">
-          Începe Assessment-ul
+        <button onclick="startAssessment()" class="bg-blue-600 hover:bg-blue-700 text-white font-medium px-8 py-3 rounded-lg transition-colors" data-i18n="startButton">
+          Începe Evaluarea
         </button>
       </div>
     </div>
@@ -132,7 +117,7 @@
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
             </svg>
-            Nu știu / Ajută-mă să răspund
+            <span data-i18n="helpButton">Nu știu / Ajută-mă să răspund</span>
           </button>
         </div>
 
@@ -142,10 +127,10 @@
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
             </svg>
-            Înapoi
+            <span data-i18n="prevButton">Înapoi</span>
           </button>
           <button id="btn-next" onclick="nextQuestion()" disabled class="bg-blue-600 hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed text-white font-medium px-6 py-2 rounded-lg transition-colors flex items-center gap-2">
-            Continuă
+            <span id="btn-next-text" data-i18n="nextButton">Continuă</span>
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
             </svg>
@@ -243,15 +228,15 @@
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
             </svg>
           </div>
-          <h2 class="text-2xl font-bold text-gray-800 mb-2">Assessment Complet!</h2>
-          <p class="text-gray-600">Iată rezultatele analizei proceselor tale:</p>
+          <h2 class="text-2xl font-bold text-gray-800 mb-2" data-i18n="resultsTitle">Assessment Complet!</h2>
+          <p class="text-gray-600" data-i18n="resultsSubtitle">Iată rezultatele analizei proceselor tale:</p>
         </div>
 
         <!-- Scores Grid -->
         <div class="grid md:grid-cols-2 gap-4 mb-8">
           <div class="score-card" data-dimension="financial_impact">
             <div class="flex justify-between items-center mb-2">
-              <span class="font-medium text-gray-700">Impact Financiar</span>
+              <span class="font-medium text-gray-700" data-i18n="scoreFinancial">Impact Financiar</span>
               <span class="score-value font-bold text-blue-600">0%</span>
             </div>
             <div class="h-2 bg-gray-200 rounded-full">
@@ -260,7 +245,7 @@
           </div>
           <div class="score-card" data-dimension="time_waste">
             <div class="flex justify-between items-center mb-2">
-              <span class="font-medium text-gray-700">Timp Pierdut</span>
+              <span class="font-medium text-gray-700" data-i18n="scoreTime">Timp Pierdut</span>
               <span class="score-value font-bold text-orange-600">0%</span>
             </div>
             <div class="h-2 bg-gray-200 rounded-full">
@@ -269,7 +254,7 @@
           </div>
           <div class="score-card" data-dimension="risk_control">
             <div class="flex justify-between items-center mb-2">
-              <span class="font-medium text-gray-700">Risc & Control</span>
+              <span class="font-medium text-gray-700" data-i18n="scoreRisk">Risc & Control</span>
               <span class="score-value font-bold text-red-600">0%</span>
             </div>
             <div class="h-2 bg-gray-200 rounded-full">
@@ -278,7 +263,7 @@
           </div>
           <div class="score-card" data-dimension="digital_maturity">
             <div class="flex justify-between items-center mb-2">
-              <span class="font-medium text-gray-700">Maturitate Digitală</span>
+              <span class="font-medium text-gray-700" data-i18n="scoreDigital">Maturitate Digitală</span>
               <span class="score-value font-bold text-green-600">0%</span>
             </div>
             <div class="h-2 bg-gray-200 rounded-full">
@@ -287,7 +272,7 @@
           </div>
           <div class="score-card md:col-span-2" data-dimension="automatable_score">
             <div class="flex justify-between items-center mb-2">
-              <span class="font-medium text-gray-700">Potențial de Automatizare</span>
+              <span class="font-medium text-gray-700" data-i18n="scoreAutomation">Potențial de Automatizare</span>
               <span class="score-value font-bold text-purple-600">0%</span>
             </div>
             <div class="h-2 bg-gray-200 rounded-full">
@@ -298,7 +283,7 @@
 
         <!-- Priorities -->
         <div class="mb-8">
-          <h3 class="font-semibold text-gray-800 mb-4">Top 3 Priorități</h3>
+          <h3 class="font-semibold text-gray-800 mb-4" data-i18n="prioritiesTitle">Top 3 Priorități</h3>
           <div id="priorities-list" class="space-y-3">
             <!-- Will be populated by JS -->
           </div>
@@ -344,7 +329,7 @@
 
   <!-- Footer -->
   <footer class="text-center py-6 text-gray-500 text-sm">
-    &copy; 2024 FlowScore. Assessment de Procese pentru IMM-uri.
+    <span data-i18n="footerText">&copy; 2024 FlowScore. Assessment de Procese pentru IMM-uri.</span>
   </footer>
 
   <!-- Scripts -->
