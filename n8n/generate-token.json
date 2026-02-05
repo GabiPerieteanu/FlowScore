@@ -1,0 +1,153 @@
+{
+  "name": "FlowScore - Generate Token",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "generate-token",
+        "responseMode": "responseNode",
+        "options": {
+          "responseHeaders": {
+            "entries": [
+              {
+                "name": "Access-Control-Allow-Origin",
+                "value": "*"
+              }
+            ]
+          }
+        }
+      },
+      "id": "webhook-generate",
+      "name": "Webhook Generate Token",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [250, 300],
+      "webhookId": "generate-token"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Generate unique token\nconst data = $input.first().json.body || $input.first().json;\nconst clientName = data.clientName || 'Client';\nconst clientEmail = data.clientEmail || '';\n\n// Generate token: fs_ + random string + timestamp\nconst token = 'fs_' + Math.random().toString(36).substr(2, 9) + Date.now().toString(36);\nconst createdAt = new Date().toISOString();\nconst maxUses = 3;\n\n// Create invitation email HTML\nconst emailHtml = `\n<!DOCTYPE html>\n<html>\n<head>\n  <style>\n    body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 0; }\n    .container { max-width: 600px; margin: 0 auto; padding: 20px; }\n    .header { background: linear-gradient(135deg, #3b82f6, #8b5cf6); color: white; padding: 40px 30px; border-radius: 10px 10px 0 0; text-align: center; }\n    .content { background: #f9fafb; padding: 30px; border-radius: 0 0 10px 10px; }\n    .cta { background: #3b82f6; color: white; padding: 15px 30px; text-decoration: none; border-radius: 8px; display: inline-block; margin: 20px 0; font-weight: bold; }\n    .cta:hover { background: #2563eb; }\n    .info-box { background: white; padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #3b82f6; }\n    .footer { text-align: center; padding: 20px; color: #6b7280; font-size: 12px; }\n    .highlight { color: #3b82f6; font-weight: bold; }\n  </style>\n</head>\n<body>\n  <div class=\"container\">\n    <div class=\"header\">\n      <h1 style=\"margin:0; font-size: 28px;\">FlowScore</h1>\n      <p style=\"margin:10px 0 0 0; opacity: 0.9;\">Assessment de Procese pentru IMM-uri</p>\n    </div>\n    \n    <div class=\"content\">\n      <p>Buna ziua <strong>${clientName}</strong>,</p>\n      \n      <p>Ati fost invitat sa completati <span class=\"highlight\">FlowScore Assessment</span> - un chestionar care analizeaza procesele din firma dumneavoastra si identifica oportunitatile de optimizare si automatizare.</p>\n      \n      <div class=\"info-box\">\n        <h3 style=\"margin-top: 0; color: #3b82f6;\">Ce veti afla:</h3>\n        <ul style=\"margin-bottom: 0;\">\n          <li>Scorul de maturitate digitala al firmei</li>\n          <li>Procesele cu potential de automatizare</li>\n          <li>Recomandari personalizate pentru optimizare</li>\n          <li>Top 3 prioritati de implementare</li>\n        </ul>\n      </div>\n      \n      <p><strong>Durata estimata:</strong> 5-10 minute</p>\n      <p><strong>Incercari disponibile:</strong> ${maxUses}</p>\n      \n      <div style=\"text-align: center;\">\n        <a href=\"https://flow-score-ten.vercel.app/index.html?token=${token}\" class=\"cta\">Incepe Assessment-ul</a>\n      </div>\n      \n      <p style=\"color: #6b7280; font-size: 14px;\">Link-ul este personal si poate fi folosit de maximum ${maxUses} ori.</p>\n    </div>\n    \n    <div class=\"footer\">\n      <p>Acest email a fost trimis de <strong>FlowScore</strong></p>\n      <p>Assessment de Procese pentru IMM-uri | Powered by OneEvent</p>\n    </div>\n  </div>\n</body>\n</html>\n`;\n\nreturn [{\n  json: {\n    token,\n    clientName,\n    clientEmail,\n    createdAt,\n    maxUses,\n    usesRemaining: maxUses,\n    status: 'active',\n    emailHtml,\n    emailSubject: `FlowScore - Invitatie Assessment pentru ${clientName}`,\n    link: `https://flow-score-ten.vercel.app/index.html?token=${token}`\n  }\n}];"
+      },
+      "id": "process-token",
+      "name": "Generate Token & Email",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [500, 300]
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1K-D5vVfNkJEazmUS2fWKX5nnyxPMXIJNURFrPx2mMu4",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Tokens",
+          "mode": "name"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "token": "={{ $json.token }}",
+            "client_name": "={{ $json.clientName }}",
+            "client_email": "={{ $json.clientEmail }}",
+            "created_at": "={{ $json.createdAt }}",
+            "max_uses": "={{ $json.maxUses }}",
+            "uses_remaining": "={{ $json.usesRemaining }}",
+            "status": "={{ $json.status }}"
+          }
+        },
+        "options": {}
+      },
+      "id": "save-token",
+      "name": "Save Token to Sheets",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [750, 200]
+    },
+    {
+      "parameters": {
+        "fromEmail": "oneventro@gmail.com",
+        "sendTo": "={{ $json.clientEmail }}",
+        "subject": "={{ $json.emailSubject }}",
+        "emailType": "html",
+        "message": "={{ $json.emailHtml }}",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "id": "send-invite",
+      "name": "Send Invitation Email",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [750, 400]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { \"success\": true, \"token\": $json.token, \"link\": $json.link, \"message\": \"Token generat si email trimis\" } }}"
+      },
+      "id": "response-success",
+      "name": "Respond Success",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [1000, 300]
+    }
+  ],
+  "connections": {
+    "Webhook Generate Token": {
+      "main": [
+        [
+          {
+            "node": "Generate Token & Email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate Token & Email": {
+      "main": [
+        [
+          {
+            "node": "Save Token to Sheets",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Send Invitation Email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Save Token to Sheets": {
+      "main": [
+        [
+          {
+            "node": "Respond Success",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send Invitation Email": {
+      "main": [
+        [
+          {
+            "node": "Respond Success",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  }
+}

@@ -1,0 +1,116 @@
+{
+  "name": "FlowScore - Validate Token",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "validate-token",
+        "responseMode": "responseNode",
+        "options": {
+          "responseHeaders": {
+            "entries": [
+              {
+                "name": "Access-Control-Allow-Origin",
+                "value": "*"
+              }
+            ]
+          }
+        }
+      },
+      "id": "webhook-validate",
+      "name": "Webhook Validate Token",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [250, 300],
+      "webhookId": "validate-token"
+    },
+    {
+      "parameters": {
+        "operation": "search",
+        "documentId": {
+          "__rl": true,
+          "value": "1K-D5vVfNkJEazmUS2fWKX5nnyxPMXIJNURFrPx2mMu4",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Tokens",
+          "mode": "name"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "token",
+              "lookupValue": "={{ $json.body?.token || $json.token }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "search-token",
+      "name": "Search Token in Sheets",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [500, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $input.all();\nconst inputToken = $('Webhook Validate Token').first().json.body?.token || $('Webhook Validate Token').first().json.token;\n\nif (items.length === 0 || !items[0].json.token) {\n  return [{\n    json: {\n      valid: false,\n      reason: 'Token inexistent',\n      token: inputToken\n    }\n  }];\n}\n\nconst tokenData = items[0].json;\nconst usesRemaining = parseInt(tokenData.uses_remaining) || 0;\n\nif (tokenData.status === 'expired' || usesRemaining <= 0) {\n  return [{\n    json: {\n      valid: false,\n      reason: 'Token expirat (nu mai are incercari disponibile)',\n      token: inputToken,\n      usesRemaining: 0\n    }\n  }];\n}\n\nreturn [{\n  json: {\n    valid: true,\n    token: inputToken,\n    clientName: tokenData.client_name,\n    clientEmail: tokenData.client_email,\n    usesRemaining: usesRemaining,\n    message: `Token valid. Mai ai ${usesRemaining} incercari.`\n  }\n}];"
+      },
+      "id": "check-validity",
+      "name": "Check Token Validity",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [750, 300]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ $json }}"
+      },
+      "id": "response-validate",
+      "name": "Respond Validation Result",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [1000, 300]
+    }
+  ],
+  "connections": {
+    "Webhook Validate Token": {
+      "main": [
+        [
+          {
+            "node": "Search Token in Sheets",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search Token in Sheets": {
+      "main": [
+        [
+          {
+            "node": "Check Token Validity",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check Token Validity": {
+      "main": [
+        [
+          {
+            "node": "Respond Validation Result",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  }
+}

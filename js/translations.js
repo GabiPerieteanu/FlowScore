@@ -15,6 +15,7 @@ const TRANSLATIONS = {
     welcomeDescription: 'Acest chestionar vă va ajuta să identificați oportunitățile de îmbunătățire și automatizare din afacerea dumneavoastră.',
     welcomeTime: '⏱️ Durată estimată: 5-7 minute',
     welcomePrivacy: '🔒 Răspunsurile sunt confidențiale',
+    welcomeHelp: '💡 Nu ești sigur pe un răspuns? Folosește butonul de ajutor!',
     startButton: 'Începe Evaluarea',
 
     // Access Denied Screen
@@ -95,6 +96,7 @@ const TRANSLATIONS = {
     welcomeDescription: 'This questionnaire will help you identify improvement and automation opportunities in your business.',
     welcomeTime: '⏱️ Estimated time: 5-7 minutes',
     welcomePrivacy: '🔒 Your answers are confidential',
+    welcomeHelp: '💡 Not sure about an answer? Use the help button!',
     startButton: 'Start Assessment',
 
     // Access Denied Screen
