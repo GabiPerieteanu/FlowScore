@@ -17,7 +17,7 @@ const state = {
 };
 
 // N8N Webhook URLs
-const N8N_BASE_URL = 'http://3.69.97.192:5678/webhook';
+const N8N_BASE_URL = 'https://n8n.onevent.ro/webhook';
 const N8N_WEBHOOK_URL = `${N8N_BASE_URL}/flowscore`;
 const N8N_VALIDATE_URL = `${N8N_BASE_URL}/validate-token`;
 const N8N_GENERATE_URL = `${N8N_BASE_URL}/generate-token`;
